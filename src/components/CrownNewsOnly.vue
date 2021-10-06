@@ -32,6 +32,9 @@ import { parseString } from 'xml2js';
 
 export default {
   name: 'CrownNewsOnly',
+  props: {
+    count: Number,
+  },
   data: () => ({
     newsList: [],
   }),
@@ -40,7 +43,8 @@ export default {
       const data = await axios.get('https://www.espn.com/espn/rss/soccer/news');
       parseString(data.data, (err, result) => {
         const items = result?.rss?.channel[0]?.item;
-        const filteredItemWithImage = items.filter((item) => item.image != null).slice(0, 7);
+        // eslint-disable-next-line max-len
+        const filteredItemWithImage = items.filter((item) => item.image != null).slice(0, this.count);
         console.dir(filteredItemWithImage);
         this.newsList = filteredItemWithImage;
         return items;
